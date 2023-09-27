@@ -1,0 +1,68 @@
+/* SuccessfulRegistration.css */
+.registration-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh; /* Занимать всю высоту видимой области экрана */
+  text-align: center;
+}
+
+.content h1 {
+  color: #434AF0; /* Цвет текста заголовка */
+  font-size: 60px; /* Измените размер шрифта по своему усмотрению */
+}
+
+.content p {
+  margin-top: 14px;
+  margin-bottom: 10px; /* Убираем нижний отступ */
+  font-size: 24px; /* Измените размер шрифта по своему усмотрению */
+}
+
+/* Стили для эффекта конфетти */
+.ReactCanvasConfetti {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1000; /* Поднимаем конфетти над другими элементами */
+
+  /* Настройки конфетти */
+  width: 10px;
+  height: 10px;
+  background-color: #FFD700; /* Цвет конфетти */
+  border-radius: 50%; /* Делаем конфетти круглыми */
+  animation: float 5s infinite; /* Добавляем анимацию плавания */
+
+  /* Дополнительные стили, чтобы сделать конфетти более привлекательными */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Анимация плавания */
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+  }
+}
+
+
+/* SuccessfulRegistration.css */
+.home-page-btn {
+  margin-top: 20px;
+  background-color: #434AF0; /* Цвет кнопки */
+  color: white; /* Цвет текста на кнопке */
+  border: none; /* Убираем границу */
+  border-radius: 10px;
+  padding: 15px 20px;
+  text-decoration: none; /* Убираем подчеркивание для ссылки */
+  font-size: 16px; /* Размер текста */
+  cursor: pointer; /* Изменяем курсор при наведении */
+}
+
+.home-page-btn:hover {
+  background-color: #3b41c9; /* Цвет кнопки при наведении */
+  color: white;
+}
