@@ -10,6 +10,8 @@ apps/users/migrations/
 *.pot
 *.pyc
 __pycache__/
+../node_modules/
+../venv/
 local_settings.py
 db.sqlite3
 media
