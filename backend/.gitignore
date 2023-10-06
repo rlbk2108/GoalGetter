@@ -1,8 +1,7 @@
 envs/env_local.ps1
 envs/.env_local
-apps/goalGetter/migrations
-apps/users/migrations
-apps/users/
+apps/goalGetter/migrations/
+apps/users/migrations/
 .idea/
 # Created by https://www.gitignore.io/api/macos,linux,django,python,pycharm
 
