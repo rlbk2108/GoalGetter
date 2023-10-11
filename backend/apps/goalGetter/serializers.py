@@ -53,5 +53,19 @@ class GoalCreateSerializers(serializers.ModelSerializer):
                 raise serializers.ValidationError("Дедлайн не может быть меньше текущей даты.")
             return value
 
+    def validate_description(self, value):
+        """
+        Проверка чтобы отправленный описание было меньше 500 символов.
+        """
+        if len(value) > 500:
+            raise serializers.ValidationError("Символов в описании больше 500.")
+        return value
 
-
+    def validate_title(self, value):
+        """
+        Проверка чтобы отправленное название цели было меньше 120 символов.
+        """
+        print(len(value))
+        if len(value) > 120:
+            raise serializers.ValidationError("Символов в названии больше 120.")
+        return value

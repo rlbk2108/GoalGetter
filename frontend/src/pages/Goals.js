@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -9,6 +9,8 @@ import InputTextField from '../components/InputTextField';
 import MultilineTextField from '../components/MultilineTextField';
 import dayjs from "dayjs";
 import './Goals.css'; // Подключение CSS-файла для дополнительных стилей
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+
 function Goals() {
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState('');
@@ -21,6 +23,35 @@ function Goals() {
     const [categorySelectedValue, setCategorySelectedValue] = useState('');
     const [titleError, setTitleError] = useState(false); // Новое состояние для ошибки
     const [deadlineError, setDeadlineError] = useState(false);
+    const [goals, setGoals] = useState([]);
+    const [categories, setCategories] = useState({});
+
+    useEffect(() => {
+        const fetchGoals = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/goal_create/');
+                setGoals(response.data);
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+            }
+        };
+
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/category/');
+                const categoriesData = response.data.reduce((acc, category) => {
+                    acc[category.id] = category.name;
+                    return acc;
+                }, {});
+                setCategories(categoriesData);
+            } catch (error) {
+                console.error('Ошибка при получении данных о категориях:', error);
+            }
+        };
+
+        fetchGoals();
+        fetchCategories();
+    }, []); // Пустой массив зависимостей означает, что эффект будет вызван только после монтирования компонента
 
     const handleClose = () => {
         setShow(false);
@@ -151,6 +182,23 @@ function Goals() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ul>
+                {goals.map(goal => (
+                    <li key={goal.id}>
+                        <p>{goal.title}</p>
+                        <div>
+                            {goal.deadline && (
+                                <>
+                                    <EventAvailableIcon fontSize="small" /> {/* Иконка события */}
+                                    <p>{dayjs(goal.deadline).format("DD.MM.YYYY")}</p>
+                                </>
+                            )}
+                            <p>{categories[goal.category]}</p>
+                        </div>
+                        {/* Добавьте остальные поля, которые вам нужны */}
+                    </li>
+                ))}
+            </ul>
         </>
     );
 }

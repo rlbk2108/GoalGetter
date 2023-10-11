@@ -27,3 +27,42 @@
         /* Дополнительные стили при наведении, если необходимо */
     }
 }
+
+/* Goals.css */
+
+/* Стили для списка целей */
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 0 auto; /* Чтобы список находился в центре страницы */
+}
+
+/* Стили для каждой цели в списке */
+li {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+/* Стили для заголовка цели */
+li p:first-child {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Стили для срока выполнения цели и категории */
+li p:nth-child(2), li p:nth-child(3) {
+    font-size: 14px;
+    color: #888;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Стили для иконки календаря */
+li svg {
+    vertical-align: middle;
+    margin-right: 5px;
+    color: #888;
+}
