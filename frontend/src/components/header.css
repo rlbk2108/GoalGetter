@@ -1,0 +1,25 @@
+.navbar {
+  padding: 20px 20px; /* Adjust padding as needed */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  background-image: url('./logo.png'); /* Set the background image URL */
+  height: 100%;
+  background-size: 50px auto; /* Adjust the size of the background image */
+  background-repeat: no-repeat; /* Prevent repeating of the background image */
+  padding-left: 55px; /* Add padding to create space for the logo image */
+
+}
+
+.logo-image {
+  margin-top: 100%;
+  width: 50px; /* Adjust the width of the logo image as needed */
+  height: auto;
+  margin-right: 10px; /* Add margin between logo and text as needed */
+}
+
+.goal-getter-text {
+  color: #434AF0; /* Change text color as needed */
+}

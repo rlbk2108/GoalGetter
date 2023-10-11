@@ -1,8 +1,7 @@
 envs/env_local.ps1
 envs/.env_local
-apps/goalGetter/migrations
-apps/users/migrations
-apps/users/
+apps/goalGetter/migrations/
+apps/users/migrations/
 .idea/
 # Created by https://www.gitignore.io/api/macos,linux,django,python,pycharm
 
@@ -11,6 +10,8 @@ apps/users/
 *.pot
 *.pyc
 __pycache__/
+../node_modules/
+../venv/
 local_settings.py
 db.sqlite3
 media
