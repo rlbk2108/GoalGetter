@@ -9,8 +9,6 @@ import InputTextField from '../components/InputTextField';
 import MultilineTextField from '../components/MultilineTextField';
 import dayjs from "dayjs";
 import './Goals.css'; // Подключение CSS-файла для дополнительных стилей
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
 function Goals() {
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState('');
@@ -23,7 +21,6 @@ function Goals() {
     const [categorySelectedValue, setCategorySelectedValue] = useState('');
     const [titleError, setTitleError] = useState(false); // Новое состояние для ошибки
     const [deadlineError, setDeadlineError] = useState(false);
-    const [descriptionError, setDescriptionError] = useState(false);
 
     const handleClose = () => {
         setShow(false);
@@ -63,10 +60,6 @@ function Goals() {
                 setDeadlineError(true);
                 return;
             }
-            if (descriptionError) {
-                return;
-            }
-
 
             // Используйте Axios для отправки данных на сервер
             const response = await axios.post('http://127.0.0.1:8000/api/goal_create/', {
@@ -95,13 +88,6 @@ function Goals() {
 
     const handleDescriptionChange = (value) => {
         setDescription(value);
-
-        // Проверка на ошибку в описании (превышение лимита символов)
-        if (value.length > 500) {
-            setDescriptionError(true);
-        } else {
-            setDescriptionError(false);
-        }
     };
 
     const handleDateChange = (date) => {
@@ -146,7 +132,7 @@ function Goals() {
                         onChange={handleGoalNameChange}
                         error={titleError} // Передача состояния ошибки в компонент InputTextField
                     />
-                    <MultilineTextField onChange={handleDescriptionChange} error={descriptionError} />
+                    <MultilineTextField onChange={handleDescriptionChange} />
                     <CalendarDatePicker onChange={handleDateChange} error={deadlineError} />
                     {deadlineError && <div style={{ color: 'red' }}>Дата должна быть не раньше сегодняшней даты</div>}
                     <BasicSelect field="category" apiEndpoint="http://127.0.0.1:8000/api/category/" label="Категория" onChange={handleCategoryChange} />

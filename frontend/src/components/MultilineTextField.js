@@ -2,24 +2,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function MultilineTextField({ onChange, error }) {
-    const [text, setText] = React.useState('');
-
+export default function MultilineTextField({ onChange }) {
     const handleDescriptionChange = (event) => {
-        const newText = event.target.value;
-        setText(newText);
-
-        // Проверка на количество символов
-        if (newText.length <= 500) {
-            onChange(newText);
-        }
+        onChange(event.target.value);
     };
 
     return (
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '100%' },
+                '& .MuiTextField-root': {width: '100%' },
             }}
             noValidate
             autoComplete="off"
@@ -31,9 +23,6 @@ export default function MultilineTextField({ onChange, error }) {
                     multiline
                     maxRows={4}
                     onChange={handleDescriptionChange}
-                    value={text}
-                    error={error}
-                    helperText={error && "Вы превысили лимит по количеству символов"}
                 />
             </div>
         </Box>
