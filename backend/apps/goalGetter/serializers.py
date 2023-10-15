@@ -34,11 +34,13 @@ class TagSerializers(serializers.ModelSerializer):
 
 
 class GoalCreateSerializers(serializers.ModelSerializer):
-    deadline = serializers.DateField(allow_null=True, required=False, format="%Y-%m-%d", input_formats=['%Y-%m-%d', ''])
+    deadline = serializers.DateField(allow_null=True, required=False,
+                                     format="%Y-%m-%d", input_formats=['%Y-%m-%d', ''])
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Goal
-        fields = ['id', 'title', 'description', 'deadline', 'category', 'tag', 'status', 'priority', 'reminder']
+        fields = ['id', 'title', 'description', 'deadline', 'category', 'tag', 'status', 'priority', 'reminder', 'user']
 
     def validate_deadline(self, value):
         """

@@ -1,4 +1,5 @@
 from django.db import models
+from apps.users.models import User
 
 
 class Priority(models.Model):
@@ -84,6 +85,7 @@ class Goal(models.Model):
                                       related_name='reminders',
                                       blank=True)
     done = models.BooleanField(verbose_name='Выполнено', default=False)
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Цель'

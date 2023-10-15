@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (GoalCreatAPIView, PriorityAPIView, StatusAPIView,
-                    CategoryAPIView, TagAPIView, WeekdaysAPIView, GoalDetailAPIView, PrintTokenAPIView)
+                    CategoryAPIView, TagAPIView, WeekdaysAPIView, GoalDetailAPIView)
 
 urlpatterns = [
     path('goal_create/', GoalCreatAPIView.as_view(), name='goal_create'),
@@ -9,7 +9,6 @@ urlpatterns = [
     path('category/', CategoryAPIView.as_view(), name='category'),
     path('tag/', TagAPIView.as_view(), name='tag'),
     path('week_days/', WeekdaysAPIView.as_view(), name='week_days'),
-    path('goals/<int:id>', GoalDetailAPIView.as_view(), name='movie_detail'),
-    path('print-token/', PrintTokenAPIView.as_view(), name='print-token'),  # Добавлено новое представление
+    path('goals/<int:id>/', GoalDetailAPIView.as_view(), name='movie_detail'),
 
 ]
