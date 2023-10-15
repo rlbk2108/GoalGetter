@@ -82,7 +82,7 @@ class Goal(models.Model):
     reminder = models.ManyToManyField(verbose_name='Напоминание',
                                       to='WeekDays',
                                       related_name='reminders',
-                                      blank=True, null=True)
+                                      blank=True)
     done = models.BooleanField(verbose_name='Выполнено', default=False)
 
     class Meta:

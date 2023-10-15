@@ -7,6 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import Cookies from "js-cookie";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -25,7 +26,12 @@ export default function MultipleSelectCheckmarks({ apiEndpoint, label,  onChange
 
     useEffect(() => {
         // Fetch data from the API endpoint
-        axios.get(apiEndpoint)
+        const accessToken = Cookies.get('access_token');
+        axios.get(apiEndpoint,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
             .then(response => setOptions(response.data))
             .catch(error => console.error('Error fetching data:', error));
     }, [apiEndpoint]);

@@ -10,6 +10,7 @@ import MultilineTextField from '../components/MultilineTextField';
 import dayjs from "dayjs";
 import './Goals.css'; // Подключение CSS-файла для дополнительных стилей
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import Cookies from 'js-cookie';
 
 function Goals() {
     const [show, setShow] = useState(false);
@@ -27,10 +28,17 @@ function Goals() {
     const [categories, setCategories] = useState({});
 
     useEffect(() => {
+
         const fetchGoals = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/goal_create/');
+                const accessToken = Cookies.get('access_token');
+                const response = await axios.get('http://127.0.0.1:8000/api/goal_create/',{
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
                 setGoals(response.data);
+
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
             }
@@ -38,7 +46,12 @@ function Goals() {
 
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/category/');
+                const accessToken = Cookies.get('access_token');
+                const response = await axios.get('http://127.0.0.1:8000/api/category/',{
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    }
+                });
                 const categoriesData = response.data.reduce((acc, category) => {
                     acc[category.id] = category.name;
                     return acc;
@@ -93,16 +106,26 @@ function Goals() {
             }
 
             // Используйте Axios для отправки данных на сервер
-            const response = await axios.post('http://127.0.0.1:8000/api/goal_create/', {
-                title,
-                description,
-                deadline,
-                category: categorySelectedValue,
-                tag: tagSelectedValues,
-                status: statusSelectedValue,
-                priority: prioritySelectedValue,
-                reminder: reminderSelectedValues,
-            });
+            const accessToken = Cookies.get('access_token');
+            const response = await axios.post(
+                'http://127.0.0.1:8000/api/goal_create/',
+                {
+                    title,
+                    description,
+                    deadline,
+                    category: categorySelectedValue,
+                    tag: tagSelectedValues,
+                    status: statusSelectedValue,
+                    priority: prioritySelectedValue,
+                    reminder: reminderSelectedValues,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json', // Указываем тип контента
+                    },
+                }
+            );
 
             console.log(response.data); // Логирование ответа сервера (если нужно)
             handleClose(); // Закрытие модального окна после успешной отправки

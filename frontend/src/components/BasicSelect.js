@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import axios from 'axios';
+import Cookies from "js-cookie";
 
 export default function BasicSelect({ label, apiEndpoint, onChange }) {
     const [data, setData] = React.useState([]);
@@ -12,7 +13,12 @@ export default function BasicSelect({ label, apiEndpoint, onChange }) {
 
     React.useEffect(() => {
         // Fetch data from the API endpoint
-        axios.get(apiEndpoint)
+        const accessToken = Cookies.get('access_token');
+        axios.get(apiEndpoint,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
             .then(response => setData(response.data))
             .catch(error => console.error('Error fetching data:', error));
     }, [apiEndpoint]);
