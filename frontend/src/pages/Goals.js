@@ -39,10 +39,10 @@ function Goals() {
                 const accessToken = Cookies.get('access_token');
                 const response = await axios.get(
                     'http://127.0.0.1:8000/api/goal_create/',{
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    });
                 setGoals(response.data);
 
             } catch (error) {
@@ -55,10 +55,10 @@ function Goals() {
                 const accessToken = Cookies.get('access_token');
                 const response = await axios.get(
                     'http://127.0.0.1:8000/api/category/',{
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    }
-                });
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        }
+                    });
                 const categoriesData = response.data.reduce((acc, category) => {
                     acc[category.id] = category.name;
                     return acc;
@@ -101,7 +101,7 @@ function Goals() {
                     id: editedGoalData.id,
                     title: editedGoalData.title,
                     description: editedGoalData.description,
-                    deadline: moment(editedGoalData.deadline).format('YYYY-MM-DD'),
+                    deadline: (editedGoalData.deadline).format('YYYY-MM-DD'),
                     category: editedGoalData.category,
                     tag: editedGoalData.tag,
                     status: editedGoalData.status,
@@ -190,10 +190,10 @@ function Goals() {
             // После успешного создания цели, отправляем GET-запрос для обновления списка целей
             const updatedResponse = await axios.get(
                 'http://127.0.0.1:8000/api/goal_create/', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                }
-            });
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    }
+                });
             setGoals(updatedResponse.data);
 
         } catch (error) {
