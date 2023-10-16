@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
-from .models import Goal, WeekDays, Status, Category, Priority, Tag
+from .models import Goal, WeekDays, Status, Category, Priority, Tag, History
 
 
 class WeekDaysSerializers(serializers.ModelSerializer):
@@ -70,3 +70,11 @@ class GoalCreateSerializers(serializers.ModelSerializer):
         if len(value) > 120:
             raise serializers.ValidationError("Символов в названии больше 120.")
         return value
+
+
+class HistorySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = History
+        fields = ['id', 'goal_title', 'user', 'deleted_at']
+
+

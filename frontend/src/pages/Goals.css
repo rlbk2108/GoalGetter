@@ -66,3 +66,19 @@ li svg {
     margin-right: 5px;
     color: #888;
 }
+/* styles.css */
+
+.custom-button {
+    background-color: #151515;
+    color: black;
+    border: none;
+    margin-left: 10px;
+}
+
+.custom-button:hover {
+    background-color: #d50606;
+}
+
+.delete-icon {
+    color: white; /* Измените цвет значка мусорки по вашему желанию */
+}

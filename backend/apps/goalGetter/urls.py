@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (GoalCreatAPIView, PriorityAPIView, StatusAPIView,
-                    CategoryAPIView, TagAPIView, WeekdaysAPIView, GoalDetailAPIView)
+                    CategoryAPIView, TagAPIView, WeekdaysAPIView, GoalDetailAPIView, HistoryAPIView)
 
 urlpatterns = [
     path('goal_create/', GoalCreatAPIView.as_view(), name='goal_create'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path('tag/', TagAPIView.as_view(), name='tag'),
     path('week_days/', WeekdaysAPIView.as_view(), name='week_days'),
     path('goals/<int:id>/', GoalDetailAPIView.as_view(), name='goal_detail'),
+    path('history/', HistoryAPIView.as_view(), name='goal_detail'),
 
 ]

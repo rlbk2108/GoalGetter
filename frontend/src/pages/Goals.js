@@ -12,7 +12,8 @@ import './Goals.css'; // Подключение CSS-файла для допол
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Cookies from 'js-cookie';
 import EditGoalModal from "./EditGoalForm";
-import moment from 'moment';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 function Goals() {
     const [show, setShow] = useState(false);
@@ -30,7 +31,8 @@ function Goals() {
     const [categories, setCategories] = useState({});
     const [editModalShow, setEditModalShow] = useState(false); // State for showing/hiding edit modal
     const [selectedGoal, setSelectedGoal] = useState(null); // State to store the goal being edited
-
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [goalToDelete, setGoalToDelete] = useState(null);
 
     useEffect(() => {
 
@@ -95,13 +97,17 @@ function Goals() {
         try {
             const goalId = selectedGoal;
             const accessToken = Cookies.get('access_token');
+
+            // Check if deadline exists before calling format
+            const deadlineFormatted = editedGoalData.deadline ? editedGoalData.deadline.format('YYYY-MM-DD') : null;
+
             const response = await axios.put(
                 `http://127.0.0.1:8000/api/goals/${goalId}/`,
                 {
                     id: editedGoalData.id,
                     title: editedGoalData.title,
                     description: editedGoalData.description,
-                    deadline: (editedGoalData.deadline).format('YYYY-MM-DD'),
+                    deadline: deadlineFormatted, // Use the formatted deadline
                     category: editedGoalData.category,
                     tag: editedGoalData.tag,
                     status: editedGoalData.status,
@@ -127,7 +133,6 @@ function Goals() {
                 }
             );
             setGoals(updatedResponse.data);
-
         } catch (error) {
             if (error.response) {
                 console.error('Error updating goal 1:', error.response);
@@ -136,6 +141,7 @@ function Goals() {
             }
         }
     };
+
 
     const sendDataToApi = async () => {
         try {
@@ -201,6 +207,46 @@ function Goals() {
         }
     };
 
+    const confirmDelete = async (goalId) => {
+        const result = window.confirm(`Вы уверены, что хотите удалить цель с ID ${goalId}?`);
+        if (result) {
+            await deleteGoal(goalId);
+        }
+    };
+    const deleteGoal = async () => {
+        try {
+            const accessToken = Cookies.get('access_token');
+            await axios.delete(`http://127.0.0.1:8000/api/goals/${goalToDelete.id}/`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            // Обновите список целей после успешного удаления
+            const updatedResponse = await axios.get('http://127.0.0.1:8000/api/goal_create/', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            setGoals(updatedResponse.data);
+
+            // Закройте модальное окно подтверждения после удаления
+            closeDeleteConfirmation();
+        } catch (error) {
+            console.error('Ошибка при удалении цели:', error);
+        }
+    };
+
+    const openDeleteConfirmation = (goalId, goalTitle) => {
+        setGoalToDelete({ id: goalId, title: goalTitle });
+        setShowDeleteConfirmation(true);
+    };
+
+    // Функция для закрытия модального окна подтверждения
+    const closeDeleteConfirmation = () => {
+        setGoalToDelete(null);
+        setShowDeleteConfirmation(false);
+    };
 
     const handleGoalNameChange = (event) => {
         setTitle(event.target.value);
@@ -304,9 +350,22 @@ function Goals() {
                         <Button variant="info" onClick={() => handleEditClick(goal.id)}>
                             Редактировать
                         </Button>
+                        <Button
+                            variant="danger"
+                            onClick={() => openDeleteConfirmation(goal.id, goal.title)}
+                            className="custom-button"
+                        >
+                            <DeleteIcon fontSize="small" className="delete-icon" />
+                        </Button>
                     </li>
                 ))}
             </ul>
+            <DeleteConfirmationModal
+                show={showDeleteConfirmation}
+                onClose={closeDeleteConfirmation}
+                onConfirm={deleteGoal}
+                goalTitle={goalToDelete ? goalToDelete.title : ''}
+            />
         </>
     );
 }

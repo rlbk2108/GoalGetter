@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from apps.users.models import User
 
 
@@ -93,3 +95,16 @@ class Goal(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class History(models.Model):
+    goal_title = models.CharField(verbose_name="Название цели", max_length=128)
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    deleted_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Удаленная цель'
+        verbose_name_plural = 'Удаленные цели'
+
+    def __str__(self):
+        return self.goal_title
