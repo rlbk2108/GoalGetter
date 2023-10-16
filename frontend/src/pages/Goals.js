@@ -169,7 +169,7 @@ function Goals() {
                 {
                     title,
                     description,
-                    deadline: dayjs(deadline).format('YYYY-MM-DD'), // Format the deadline here as well
+                    deadline: deadline ? dayjs(deadline).format('YYYY-MM-DD') : null,
                     category: categorySelectedValue,
                     tag: tagSelectedValues,
                     status: statusSelectedValue,
