@@ -8,6 +8,7 @@ import BasicSelect from '../components/BasicSelect';
 import MultipleSelect from '../components/MultipleSelect';
 import axios from 'axios';
 import Cookies from "js-cookie";
+import dayjs from "dayjs";
 
 const EditGoalModal = ({ show, handleClose, goal = {}, onSave }) => {
     const [editedTitle, setEditedTitle] = useState('');
@@ -18,6 +19,8 @@ const EditGoalModal = ({ show, handleClose, goal = {}, onSave }) => {
     const [editedStatus, setEditedStatus] = useState('');
     const [editedPriority, setEditedPriority] = useState('');
     const [editedReminder, setEditedReminder] = useState([]);
+    const [titleError, setTitleError] = useState(false); // Новое состояние для ошибки
+    const [deadlineError, setDeadlineError] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,6 +74,16 @@ const EditGoalModal = ({ show, handleClose, goal = {}, onSave }) => {
 
     // Handle saving the edited goal
     const handleSave = () => {
+        if (!editedTitle.trim()) {
+            // Set the title error state
+            setTitleError(true);
+            return;
+        }
+        if (dayjs(editedDeadline).isBefore(dayjs().startOf('day'))) {
+            setDeadlineError(true);
+            return;
+        }
+
         onSave({
             id: goal.id,
             title: editedTitle,
@@ -83,54 +96,61 @@ const EditGoalModal = ({ show, handleClose, goal = {}, onSave }) => {
             reminder: editedReminder,
             // ... остальные измененные поля
         });
+        setTitleError(false);
+        setDeadlineError(false);
+
         handleClose();
     };
 
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Goal</Modal.Title>
+                <Modal.Title>Редактирование цели</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {/* Input fields for editing goal data */}
-                <InputTextField value={editedTitle} onChange={handleTitleChange} />
+                <InputTextField value={editedTitle} onChange={handleTitleChange} error={titleError} // Pass the titleError state to InputTextField
+                />
                 <MultilineTextField value={editedDescription} onChange={(value) => setEditedDescription(value)} />
-                <CalendarDatePicker value={editedDeadline} onChange={(date) => setEditedDeadline(date)} />
+                <CalendarDatePicker value={editedDeadline}
+                                    onChange={(date) => setEditedDeadline(date)}
+                                    error={deadlineError} />
+                {deadlineError && <div style={{ color: 'red' }}>Дата должна быть не раньше сегодняшней даты</div>}
 
                 {/* Dropdowns for additional fields */}
                 <BasicSelect
                     apiEndpoint="http://127.0.0.1:8000/api/category/"
-                    label="Category"
+                    label="Категория"
                     value={editedCategory}
                     onChange={handleCategoryChange} />
                 <MultipleSelect
                     apiEndpoint="http://127.0.0.1:8000/api/tag/"
-                    label="Tags"
+                    label="Тег"
                     value={editedTag}  // Pass the value prop here
                     onChange={(values) => setEditedTag(values)}
                 />
                 <BasicSelect
                     apiEndpoint="http://127.0.0.1:8000/api/status/"
-                    label="Status"
+                    label="Статус"
                     value={editedStatus}
                     onChange={(event) => setEditedStatus(event.target.value)} />
                 <BasicSelect
                     apiEndpoint="http://127.0.0.1:8000/api/priority/"
-                    label="Priority"
+                    label="Приоритет"
                     value={editedPriority}
                     onChange={handlePriorityChange} />
                 <MultipleSelect
                     apiEndpoint="http://127.0.0.1:8000/api/week_days/"
-                    label="Reminder"
+                    label="Напоминание"
                     value={editedReminder}
                     onChange={handleReminderChange} />
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    Close
+                    Закрыть
                 </Button>
                 <Button variant="primary" onClick={handleSave}>
-                    Save Changes
+                    Сохранить
                 </Button>
             </Modal.Footer>
         </Modal>

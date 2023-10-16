@@ -14,19 +14,24 @@ export default function BasicSelect({ label, apiEndpoint, value, onChange }) {
     const [selectedValue, setSelectedValue] = React.useState(value || '');
 
     React.useEffect(() => {
-        // Fetch data from the API endpoint
-        const accessToken = Cookies.get('access_token');
-        axios.get(apiEndpoint, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const accessToken = Cookies.get('access_token');
+                const response = await axios.get(apiEndpoint, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+
                 setData(response.data);
                 // Synchronize selectedValue with the value prop
                 setSelectedValue(value || '');
-            })
-            .catch(error => console.error('Error fetching data:', error));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, [apiEndpoint, value]); // Include value in the dependency array
 
     const handleChange = (event) => {

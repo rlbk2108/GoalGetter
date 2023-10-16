@@ -12,6 +12,7 @@ import './Goals.css'; // Подключение CSS-файла для допол
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Cookies from 'js-cookie';
 import EditGoalModal from "./EditGoalForm";
+import moment from 'moment';
 
 function Goals() {
     const [show, setShow] = useState(false);
@@ -86,8 +87,7 @@ function Goals() {
     };
     const handleShow = () => setShow(true);
     const handleEditClick = (goal) => {
-        console.log('Edit goal:', goal);
-        setSelectedGoal(goal); // Возможно, setSelectedGoal(goal.id) вместо setSelectedGoal(goal) в зависимости от структуры цели
+        setSelectedGoal(goal);
         setEditModalShow(true);
     };
 
@@ -101,7 +101,7 @@ function Goals() {
                     id: editedGoalData.id,
                     title: editedGoalData.title,
                     description: editedGoalData.description,
-                    deadline: editedGoalData.deadline,
+                    deadline: moment(editedGoalData.deadline).format('YYYY-MM-DD'),
                     category: editedGoalData.category,
                     tag: editedGoalData.tag,
                     status: editedGoalData.status,
@@ -129,8 +129,11 @@ function Goals() {
             setGoals(updatedResponse.data);
 
         } catch (error) {
-            console.error('Error updating goal:', error.response);
-            // Handle the error, e.g., show a notification to the user
+            if (error.response) {
+                console.error('Error updating goal 1:', error.response);
+            } else {
+                console.error('Error updating goal 2:', error.message);
+            }
         }
     };
 
