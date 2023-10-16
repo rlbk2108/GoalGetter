@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import './Goals.css'; // Подключение CSS-файла для дополнительных стилей
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Cookies from 'js-cookie';
+import EditGoalModal from "./EditGoalForm";
 
 function Goals() {
     const [show, setShow] = useState(false);
@@ -26,13 +27,17 @@ function Goals() {
     const [deadlineError, setDeadlineError] = useState(false);
     const [goals, setGoals] = useState([]);
     const [categories, setCategories] = useState({});
+    const [editModalShow, setEditModalShow] = useState(false); // State for showing/hiding edit modal
+    const [selectedGoal, setSelectedGoal] = useState(null); // State to store the goal being edited
+
 
     useEffect(() => {
 
         const fetchGoals = async () => {
             try {
                 const accessToken = Cookies.get('access_token');
-                const response = await axios.get('http://127.0.0.1:8000/api/goal_create/',{
+                const response = await axios.get(
+                    'http://127.0.0.1:8000/api/goal_create/',{
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
@@ -47,7 +52,8 @@ function Goals() {
         const fetchCategories = async () => {
             try {
                 const accessToken = Cookies.get('access_token');
-                const response = await axios.get('http://127.0.0.1:8000/api/category/',{
+                const response = await axios.get(
+                    'http://127.0.0.1:8000/api/category/',{
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     }
@@ -79,13 +85,61 @@ function Goals() {
         setTitleError(false); // Сброс ошибки при закрытии модального окна
     };
     const handleShow = () => setShow(true);
+    const handleEditClick = (goal) => {
+        console.log('Edit goal:', goal);
+        setSelectedGoal(goal); // Возможно, setSelectedGoal(goal.id) вместо setSelectedGoal(goal) в зависимости от структуры цели
+        setEditModalShow(true);
+    };
+
+    const handleSaveEditedGoal = async (editedGoalData) => {
+        try {
+            const goalId = selectedGoal;
+            const accessToken = Cookies.get('access_token');
+            const response = await axios.put(
+                `http://127.0.0.1:8000/api/goals/${goalId}/`,
+                {
+                    id: editedGoalData.id,
+                    title: editedGoalData.title,
+                    description: editedGoalData.description,
+                    deadline: editedGoalData.deadline,
+                    category: editedGoalData.category,
+                    tag: editedGoalData.tag,
+                    status: editedGoalData.status,
+                    priority: editedGoalData.priority,
+                    reminder: editedGoalData.reminder,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            console.log(response.data); // Log the response if needed
+
+            // Update the goals list after successful update
+            const updatedResponse = await axios.get(
+                'http://127.0.0.1:8000/api/goal_create/', {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            setGoals(updatedResponse.data);
+
+        } catch (error) {
+            console.error('Error updating goal:', error.response);
+            // Handle the error, e.g., show a notification to the user
+        }
+    };
 
     const sendDataToApi = async () => {
         try {
             console.log('Sending data to the server:', {
                 title,
                 description,
-                deadline,
+                deadline: dayjs(deadline).format('YYYY-MM-DD'), // Format the deadline here
                 category: categorySelectedValue,
                 tag: tagSelectedValues,
                 status: statusSelectedValue,
@@ -112,7 +166,7 @@ function Goals() {
                 {
                     title,
                     description,
-                    deadline,
+                    deadline: dayjs(deadline).format('YYYY-MM-DD'), // Format the deadline here as well
                     category: categorySelectedValue,
                     tag: tagSelectedValues,
                     status: statusSelectedValue,
@@ -122,7 +176,7 @@ function Goals() {
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json', // Указываем тип контента
+                        'Content-Type': 'application/json',
                     },
                 }
             );
@@ -131,7 +185,8 @@ function Goals() {
             handleClose(); // Закрытие модального окна после успешной отправки
 
             // После успешного создания цели, отправляем GET-запрос для обновления списка целей
-            const updatedResponse = await axios.get('http://127.0.0.1:8000/api/goal_create/', {
+            const updatedResponse = await axios.get(
+                'http://127.0.0.1:8000/api/goal_create/', {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 }
@@ -198,12 +253,17 @@ function Goals() {
                     <MultilineTextField onChange={handleDescriptionChange} />
                     <CalendarDatePicker onChange={handleDateChange} error={deadlineError} />
                     {deadlineError && <div style={{ color: 'red' }}>Дата должна быть не раньше сегодняшней даты</div>}
-                    <BasicSelect field="category" apiEndpoint="http://127.0.0.1:8000/api/category/" label="Категория" onChange={handleCategoryChange} />
-                    <MultipleSelect apiEndpoint="http://127.0.0.1:8000/api/tag/" label="Теги" onChange={handleTagChange} />
-                    <BasicSelect field="status" apiEndpoint="http://127.0.0.1:8000/api/status/" label="Статус" onChange={handleStatusChange} />
-                    <BasicSelect field="priority" apiEndpoint="http://127.0.0.1:8000/api/priority/" label="Приоритет" onChange={handlePriorityChange} />
-                    <MultipleSelect apiEndpoint="http://127.0.0.1:8000/api/week_days/" label="Напоминание" onChange={handleReminderChange} />
-
+                    <BasicSelect field="category" apiEndpoint=
+                        "http://127.0.0.1:8000/api/category/" label="Категория" onChange={handleCategoryChange} />
+                    <MultipleSelect apiEndpoint=
+                                        "http://127.0.0.1:8000/api/tag/" label="Теги" onChange={handleTagChange} />
+                    <BasicSelect field="status" apiEndpoint=
+                        "http://127.0.0.1:8000/api/status/" label="Статус" onChange={handleStatusChange} />
+                    <BasicSelect field="priority" apiEndpoint=
+                        "http://127.0.0.1:8000/api/priority/" label="Приоритет" onChange={handlePriorityChange} />
+                    <MultipleSelect apiEndpoint=
+                                        "http://127.0.0.1:8000/api/week_days/"
+                                    label="Напоминание" onChange={handleReminderChange} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} className="Button-secondary">
@@ -214,6 +274,17 @@ function Goals() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            {selectedGoal && (
+                <EditGoalModal
+                    show={editModalShow}
+                    handleClose={() => {
+                        setEditModalShow(false);
+                        setSelectedGoal(null); // Clear the selected goal when closing the modal
+                    }}
+                    goal={selectedGoal}
+                    onSave={handleSaveEditedGoal}
+                />
+            )}
             <ul>
                 {goals.map(goal => (
                     <li key={goal.id}>
@@ -221,13 +292,15 @@ function Goals() {
                         <div>
                             {goal.deadline && (
                                 <>
-                                    <EventAvailableIcon fontSize="small" /> {/* Иконка события */}
+                                    <EventAvailableIcon fontSize="small" />
                                     <p>{dayjs(goal.deadline).format("DD.MM.YYYY")}</p>
                                 </>
                             )}
                             <p>{categories[goal.category]}</p>
                         </div>
-                        {/* Добавьте остальные поля, которые вам нужны */}
+                        <Button variant="info" onClick={() => handleEditClick(goal.id)}>
+                            Редактировать
+                        </Button>
                     </li>
                 ))}
             </ul>

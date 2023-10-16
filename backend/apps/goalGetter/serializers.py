@@ -67,7 +67,6 @@ class GoalCreateSerializers(serializers.ModelSerializer):
         """
         Проверка чтобы отправленное название цели было меньше 120 символов.
         """
-        print(len(value))
         if len(value) > 120:
             raise serializers.ValidationError("Символов в названии больше 120.")
         return value

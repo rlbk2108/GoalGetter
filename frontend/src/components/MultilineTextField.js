@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function MultilineTextField({ onChange }) {
+export default function MultilineTextField({ value, onChange }) {
     const handleDescriptionChange = (event) => {
         onChange(event.target.value);
     };
@@ -20,6 +20,7 @@ export default function MultilineTextField({ onChange }) {
                 <TextField
                     id="outlined-multiline-flexible"
                     label="Описание"
+                    value={value}
                     multiline
                     maxRows={4}
                     onChange={handleDescriptionChange}

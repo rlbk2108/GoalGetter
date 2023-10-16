@@ -12,10 +12,10 @@ import 'dayjs/locale/ru';
 // Set the locale for dayjs to Russian
 dayjs.locale('ru');
 
-export default function CalendarDatePicker({ onChange }) {
+export default function CalendarDatePicker({ value, onChange }) {
     const handleDateChange = (date) => {
-        // Преобразовать date в нужный формат "YYYY-MM-DD"
-        const formattedDate = date.format('YYYY-MM-DD');
+        // Ensure that date is a valid Dayjs object
+        const formattedDate = dayjs(date);
         onChange(formattedDate);
     };
 
@@ -24,27 +24,24 @@ export default function CalendarDatePicker({ onChange }) {
             dateAdapter={AdapterDayjs}
             localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
             dateFormats={{
-                shortDate: 'DD.MM.YYYY', // Adjust the format as needed
-                mediumDate: 'DD MMM YYYY', // Adjust the format as needed
-                longDate: 'DD MMMM YYYY', // Adjust the format as needed
+                shortDate: 'DD.MM.YYYY',
+                mediumDate: 'DD MMM YYYY',
+                longDate: 'DD MMMM YYYY',
             }}
-            locale={ruRU} // Важно передать объект локализации, а не только текстовые данные
+            locale={ruRU}
         >
-            <DemoContainer
-                components={['DatePicker']}
-
-            >
+            <DemoContainer components={['DatePicker']}>
                 <DatePicker
                     label="Срок выполнения цели"
                     onAccept={handleDateChange}
                     format="YYYY-MM-DD"
-                    startDay="1" // Set the start day to Monday (1 corresponds to Monday)
+                    value={value ? dayjs(value) : null} // Convert value to Dayjs object
+                    startDay="1"
                     sx={{
                         width: '100%',
                     }}
                 />
             </DemoContainer>
-
         </LocalizationProvider>
     );
 }

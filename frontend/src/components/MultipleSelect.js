@@ -20,21 +20,27 @@ const MenuProps = {
     },
 };
 
-export default function MultipleSelectCheckmarks({ apiEndpoint, label,  onChange}) {
+// ... (other imports)
+
+export default function MultipleSelectCheckmarks({ apiEndpoint, label, value, onChange }) {
     const [options, setOptions] = useState([]);
-    const [selectedValues, setSelectedValues] = React.useState([]);
+    const [selectedValues, setSelectedValues] = React.useState(value || []); // Set initial selectedValues
 
     useEffect(() => {
         // Fetch data from the API endpoint
         const accessToken = Cookies.get('access_token');
-        axios.get(apiEndpoint,{
+        axios.get(apiEndpoint, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
-            .then(response => setOptions(response.data))
+            .then(response => {
+                setOptions(response.data);
+                // Synchronize selectedValues with the value prop
+                setSelectedValues(value || []);
+            })
             .catch(error => console.error('Error fetching data:', error));
-    }, [apiEndpoint]);
+    }, [apiEndpoint, value]); // Include value in the dependency array
 
     const handleChange = (event) => {
         const {
@@ -42,7 +48,7 @@ export default function MultipleSelectCheckmarks({ apiEndpoint, label,  onChange
         } = event;
         setSelectedValues(value);
         if (onChange) {
-            onChange(value.map(id => parseInt(id, 10))); // Преобразование в числовой формат, если id - строка
+            onChange(value.map(id => parseInt(id, 10)));
         }
     };
 
