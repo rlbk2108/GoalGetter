@@ -22,7 +22,8 @@ class GoalDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         # Возвращаем только записи, принадлежащие текущему пользователю
-        return Goal.objects.filter(user=str(self.request.user.id))
+        queryset = Goal.objects.filter(user=str(self.request.user.id))
+        return queryset
 
 
 class TagAPIView(ListAPIView):

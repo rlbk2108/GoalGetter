@@ -9,6 +9,6 @@ urlpatterns = [
     path('category/', CategoryAPIView.as_view(), name='category'),
     path('tag/', TagAPIView.as_view(), name='tag'),
     path('week_days/', WeekdaysAPIView.as_view(), name='week_days'),
-    path('goals/<int:id>/', GoalDetailAPIView.as_view(), name='movie_detail'),
+    path('goals/<int:id>/', GoalDetailAPIView.as_view(), name='goal_detail'),
 
 ]

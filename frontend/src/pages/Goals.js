@@ -82,7 +82,6 @@ function Goals() {
 
     const sendDataToApi = async () => {
         try {
-
             console.log('Sending data to the server:', {
                 title,
                 description,
@@ -93,6 +92,7 @@ function Goals() {
                 priority: prioritySelectedValue,
                 reminder: reminderSelectedValues,
             });
+
             // Проверка на пустое название цели
             if (!title.trim()) {
                 setTitleError(true);
@@ -129,6 +129,15 @@ function Goals() {
 
             console.log(response.data); // Логирование ответа сервера (если нужно)
             handleClose(); // Закрытие модального окна после успешной отправки
+
+            // После успешного создания цели, отправляем GET-запрос для обновления списка целей
+            const updatedResponse = await axios.get('http://127.0.0.1:8000/api/goal_create/', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            setGoals(updatedResponse.data);
+
         } catch (error) {
             console.error('Ошибка при отправке данных:', error.response);
         }
