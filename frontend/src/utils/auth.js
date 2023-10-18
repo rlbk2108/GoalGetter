@@ -3,9 +3,9 @@ import axios from './axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
-export const login = async (email, password) => {
+export const loginFunc = async (email, password) => {
     try {
-        const { data, status } = await axios.post('token/', {
+        const { data, status } = await axios.post('api/token/', {
             email,
             password,
         });
@@ -21,14 +21,16 @@ export const login = async (email, password) => {
     }
 };
 
-export const register = async (username, password, password2) => {
+export const register = async (first_name, last_name, email, login, password) => {
     try {
-        const { data } = await axios.post('register/', {
-            username,
+        const { data } = await axios.post('/registration', {
+            first_name,
+            last_name,
+            email,
+            login,
             password,
-            password2,
         });
-        await login(username, password);
+        await loginFunc(login, password);
         return { data, error: null };
     } catch (error) {
         return {
@@ -80,7 +82,7 @@ export const setAuthUser = (access_token, refresh_token) => {
 
 export const getRefreshToken = async () => {
     const refresh_token = Cookies.get('refresh_token');
-    const response = await axios.post('token/refresh/', {
+    const response = await axios.post('api/token/refresh/', {
         refresh: refresh_token,
     });
     return response.data;

@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Registration.css'; // Подключение CSS-файла для дополнительных стилей
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import {useAuthStore} from "../store/auth";
-import {login} from "../utils/auth";
+import {loginFunc} from "../utils/auth";
 
 const Authentication = () => {
     const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const Authentication = () => {
         if (isLoggedIn()) {
             navigate('/home');
         }
-    }, []);
+    }, );
 
 
     const resetForm = () => {
@@ -31,7 +31,7 @@ const Authentication = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const { error } = await login(email, password);
+        const { error } = await loginFunc(email, password);
         if (error) {
             alert(error);
         } else {
