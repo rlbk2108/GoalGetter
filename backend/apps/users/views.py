@@ -13,10 +13,11 @@ class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
 
+
 class UserCreateAPIView(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = [AllowAny]
+
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')

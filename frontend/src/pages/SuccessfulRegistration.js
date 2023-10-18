@@ -11,6 +11,7 @@ const RegistrationSuccess = () => {
         <p>Спасибо за регистрацию на нашем сайте. Мы рады приветствовать вас в нашем сообществе.</p>
 
       <Link to="/home" className="btn home-page-btn">
+
         На главную страницу
       </Link>
           </div>

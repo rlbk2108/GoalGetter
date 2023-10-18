@@ -22,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',  # Include only once
-
     'rest_framework.authtoken',
+
     'corsheaders',
 
     'apps.goalGetter',
