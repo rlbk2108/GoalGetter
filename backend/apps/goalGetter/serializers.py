@@ -40,7 +40,7 @@ class GoalCreateSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
-        fields = ['id', 'title', 'description', 'deadline', 'category', 'tag', 'status', 'priority', 'reminder', 'user']
+        fields = ['id', 'title', 'description', 'deadline', 'category', 'tag', 'status', 'priority', 'reminder', 'user', 'done']
 
     def validate_deadline(self, value):
         """

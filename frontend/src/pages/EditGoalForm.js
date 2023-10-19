@@ -9,6 +9,7 @@ import MultipleSelect from '../components/MultipleSelect';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
+import {OpenDeleteConfirmation, openDeleteConfirmation} from "./DeleteGoal";
 
 const EditGoalModal = ({ show, handleClose, goal = {}, onSave }) => {
     const [editedTitle, setEditedTitle] = useState('');
