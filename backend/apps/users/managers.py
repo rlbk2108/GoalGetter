@@ -2,10 +2,6 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    """
-    Custom user model manager where email is the unique identifiers
-    for authentication instead of username.
-    """
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -22,9 +18,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
-        """
-        Create and save a User with the given email and password.
-        """
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
 
@@ -32,9 +25,6 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email=None,
                          password=None, **extra_fields):
-        """
-        Create and save a SuperUser with the given email and password.
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
