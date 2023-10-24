@@ -13,6 +13,7 @@ import './GoalsList.css';
 import Cookies from 'js-cookie';
 import EditGoalModal from "./EditGoalForm";
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import FlipMove from 'react-flip-move';
 
 function Goals() {
     const [show, setShow] = useState(false);
@@ -470,8 +471,9 @@ function Goals() {
                 </svg>
                 <span className="home-text15">Add New Goal</span>
               </Button>
+                <FlipMove>
                 {goals.map(goal => (
-                <div className="home-container17">
+                <div key={goal.id} className="home-container17">
                     <div onDoubleClick={() => openDeleteConfirmation(goal.id, goal.title)}
                          className="home-container18">
                       <div className="home-container19">
@@ -480,10 +482,17 @@ function Goals() {
                                checked={goal.done}
                                onChange={event => handleDoneChange(goal.id, event)}
                                />
-                        <button  id="titleButton" type="button"  onClick={() => handleEditClick(goal.id)} className="home-button12 button">
-                            {goal.title}
 
-                        </button>
+                          {goal.done ?
+                              <button id="titleButton" type="button" onClick={() => handleEditClick(goal.id)} className="home-button12-completed button">
+                                {goal.title}
+                              </button>
+                              :
+                              <button id="titleButton" type="button" onClick={() => handleEditClick(goal.id)} className="home-button12 button">
+                                {goal.title}
+                              </button>
+                          }
+
                       </div>
                         {goal.deadline && (
                             <>
@@ -504,6 +513,7 @@ function Goals() {
                     <div className="home-separator3"></div>
                   </div>
                 ))}
+                    </FlipMove>
             </div>
             <div id="goal-ops" className="home-goal-ops">
               <div className="home-container21">

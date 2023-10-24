@@ -17,7 +17,7 @@ class GoalCreatAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         # Возвращаем только записи, принадлежащие текущему пользователю
-        return Goal.objects.filter(user=str(self.request.user.id))
+        return Goal.objects.filter(user=str(self.request.user.id)).order_by('done')
 
 
 class GoalDetailAPIView(RetrieveUpdateDestroyAPIView):
