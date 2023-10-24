@@ -500,15 +500,27 @@
   margin-bottom: 32px;
 }
 .home-button10 {
+  background-color: #b0b0b0;
   height: 100%;
   display: flex;
   align-self: stretch;
+  border-color: transparent;
   text-align: left;
-  border-color: rgba(0, 0, 0, 0.66);
+  margin-right: 0;
   border-radius: 6px;
   flex-direction: row;
   margin-bottom: 32px;
 }
+
+.home-button10:hover {
+  background-color: #a0a0a0;
+  border-color: transparent;
+}
+
+.home-button10:active {
+  background-color: rgba(160, 160, 160, 0.51);
+}
+
 .home-icon18 {
   fill: rgba(0, 0, 0, 0.65);
   width: 24px;
@@ -720,12 +732,17 @@
   align-self: stretch;
   margin-top: 32px;
   border-color: rgba(0, 0, 0, 0.35);
+
+  border-width: 1px;
+  border-radius: 6px;
+  padding: 4px 18px;
 }
 .home-textarea {
   align-self: stretch;
   border-color: rgba(0, 0, 0, 0.35);
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 4px 18px;
+  border-width: 1px;
+  border-radius: 6px;
 }
 .home-container23 {
   gap: 0;

@@ -10,10 +10,8 @@ import MultilineTextField from '../components/MultilineTextField';
 import dayjs from "dayjs";
 import './Goals.css'; // Подключение CSS-файла для дополнительных стилей
 import './GoalsList.css';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Cookies from 'js-cookie';
 import EditGoalModal from "./EditGoalForm";
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 function Goals() {
@@ -21,7 +19,6 @@ function Goals() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(null);
-    const [done, setDone] = useState(false);
     const [tagSelectedValues, setTagSelectedValues] = useState([]);
     const [reminderSelectedValues, setReminderSelectedValues] = useState([]);
     const [prioritySelectedValue, setPrioritySelectedValue] = useState('');
@@ -36,57 +33,69 @@ function Goals() {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [goalToDelete, setGoalToDelete] = useState(null);
     const [filter, setFilter] = useState(false);
+    const [done, doneChanged] = useState(false);
 
 
     useEffect(() => {
-
-        const fetchGoals = async () => {
-            try {
-                const accessToken = Cookies.get('access_token');
-                const response = await axios.get(
-                    'http://127.0.0.1:8000/api/goal_create/',{
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        }
-                    });
-
+        const accessToken = Cookies.get('access_token');
+        if (accessToken) {
+            const fetchData = async () => {
+                axios.get(
+                'http://127.0.0.1:8000/api/goal_create/',{
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                })
+            .then(response => {
                 if (!filter) {
                     setGoals(response.data);
+                } else if (done) {
+                    setGoals(response.data)
                 } else {
                     const sortedGoals = response.data.sort((a, b) => {
-                      // Assuming 'date' is a string in the format 'YYYY-MM-DD'
+                      // Assuming 'deadline' is a string in the format 'YYYY-MM-DD'
                       return new Date(b.deadline) - new Date(a.deadline);
                     });
+
                     setGoals(sortedGoals)
                 }
-
-            } catch (error) {
-                console.error('Ошибка при получении данных:', error);
+            })
+            .catch(error => {
+                console.log('Ошибка при получении данных о целях:', error)
+            });
             }
-        };
 
-        const fetchCategories = async () => {
-            try {
-                const accessToken = Cookies.get('access_token');
-                const response = await axios.get(
-                    'http://127.0.0.1:8000/api/category/',{
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        }
-                    });
+            const fetchCategories = async () => {
+                axios.get(
+                'http://127.0.0.1:8000/api/category/',{
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    }
+                })
+            .then(response => {
                 const categoriesData = response.data.reduce((acc, category) => {
-                    acc[category.id] = category.name;
-                    return acc;
-                }, {});
+                acc[category.id] = category.name;
+                return acc;
+                });
                 setCategories(categoriesData);
-            } catch (error) {
-                console.error('Ошибка при получении данных о категориях:', error);
+            })
+            .catch(error => {
+                console.log('Ошибка при получении данных о категориях:', error)
+            });
             }
-        };
 
-        fetchGoals();
-        fetchCategories();
-    }, []); // Пустой массив зависимостей означает, что эффект будет вызван только после монтирования компонента
+            fetchData();
+            fetchCategories();
+
+            const intervalId = setInterval(() => {
+                fetchData();
+                fetchCategories();
+            }, 10000); // обновляем каждые 10 секунд
+
+            return () => clearInterval(intervalId);
+        }
+
+    }, [filter, done]);
 
     const handleClose = () => {
         setShow(false);
@@ -98,7 +107,6 @@ function Goals() {
         setPrioritySelectedValue('');
         setStatusSelectedValue('');
         setCategorySelectedValue('');
-        setDone(false);
         setTitleError(false); // Сброс ошибки при закрытии модального окна
     };
     const handleShow = () => setShow(true);
@@ -127,7 +135,6 @@ function Goals() {
                     status: editedGoalData.status,
                     priority: editedGoalData.priority,
                     reminder: editedGoalData.reminder,
-                    done: done
                 },
                 {
                     headers: {
@@ -290,18 +297,14 @@ function Goals() {
         setReminderSelectedValues(selectedValues);
     };
 
-    const handleDoneChange = (goalId) => {
-        if (done === true) {
-            setDone(false);
-        } else {
-            setDone(true);
-        }
+    const handleDoneChange = (goalId, event) => {
 
         const accessToken = Cookies.get('access_token');
+
         axios.patch(
             `http://127.0.0.1:8000/api/goals/${goalId}/`,
             {
-                done:done
+                done:event.target.checked
             },
             {
                 headers: {
@@ -309,11 +312,12 @@ function Goals() {
             },
             }
         ).then(response => {
-            console.log(response)
+            console.log(response.data)
         }
         ).catch(error => {
             console.error(error)
         })
+        doneChanged(!done)
     }
 
     const handleStatusChange = (event) => {
@@ -334,12 +338,7 @@ function Goals() {
     }
 
     const handleChangeFilter = () => {
-        console.log(filter)
-        if (filter === true) {
-            setFilter(false);
-        } else {
-            setFilter(true);
-        }
+        filter ? setFilter(false) : setFilter(true)
     }
 
     return (
@@ -452,7 +451,6 @@ function Goals() {
           </div>
           <div className="home-profile">
             <img
-              alt="image"
               src="https://images.unsplash.com/photo-1562159278-1253a58da141?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDIyfHxtYW4lMjBwb3J0dHJhaXR8ZW58MHx8fHwxNjI3MjkzNTM1&amp;ixlib=rb-1.2.1&amp;w=200"
               className="home-image"
             />
@@ -466,12 +464,12 @@ function Goals() {
           <div className="home-dashboard">
             <div className="home-goals-list">
               <h1 className="home-text14">Goals</h1>
-              <button type="button" onClick={handleShow} className="home-button10 button">
+              <Button type="button" onClick={handleShow} className="home-button10 button">
                 <svg viewBox="0 0 1024 1024" className="home-icon18">
                   <path d="M768 426.667h-170.667v-170.667c0-47.104-38.229-85.333-85.333-85.333s-85.333 38.229-85.333 85.333l3.029 170.667h-173.696c-47.104 0-85.333 38.229-85.333 85.333s38.229 85.333 85.333 85.333l173.696-3.029-3.029 173.696c0 47.104 38.229 85.333 85.333 85.333s85.333-38.229 85.333-85.333v-173.696l170.667 3.029c47.104 0 85.333-38.229 85.333-85.333s-38.229-85.333-85.333-85.333z"></path>
                 </svg>
                 <span className="home-text15">Add New Goal</span>
-              </button>
+              </Button>
                 {goals.map(goal => (
                 <div className="home-container17">
                     <div onDoubleClick={() => openDeleteConfirmation(goal.id, goal.title)}
@@ -480,10 +478,11 @@ function Goals() {
                         <input id="doneCheckbox" type="checkbox"
                                className="home-checkbox1"
                                checked={goal.done}
-                               onClick={() => handleDoneChange(goal.id)}
+                               onChange={event => handleDoneChange(goal.id, event)}
                                />
-                        <button type="button"  onClick={() => handleEditClick(goal.id)} className="home-button12 button">
+                        <button  id="titleButton" type="button"  onClick={() => handleEditClick(goal.id)} className="home-button12 button">
                             {goal.title}
+
                         </button>
                       </div>
                         {goal.deadline && (
@@ -520,7 +519,7 @@ function Goals() {
                   </button>
                 </div>
                 <form
-                  enctype="application/x-www-form-urlencoded"
+                  encType="application/x-www-form-urlencoded"
                   className="home-form"
                 >
                   <input
@@ -633,6 +632,57 @@ function Goals() {
         </div>
       </div>
     </div>
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Создать цель</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <InputTextField
+                        value={title}
+                        onChange={handleGoalNameChange}
+                        error={titleError} // Передача состояния ошибки в компонент InputTextField
+                    />
+                    <MultilineTextField onChange={handleDescriptionChange} />
+                    <CalendarDatePicker onChange={handleDateChange} error={deadlineError} />
+                    {deadlineError && <div style={{ color: 'red' }}>Дата должна быть не раньше сегодняшней даты</div>}
+                    <BasicSelect field="category" apiEndpoint=
+                        "http://127.0.0.1:8000/api/category/" label="Категория" onChange={handleCategoryChange} />
+                    <MultipleSelect apiEndpoint=
+                                        "http://127.0.0.1:8000/api/tag/" label="Теги" onChange={handleTagChange} />
+                    <BasicSelect field="status" apiEndpoint=
+                        "http://127.0.0.1:8000/api/status/" label="Статус" onChange={handleStatusChange} />
+                    <BasicSelect field="priority" apiEndpoint=
+                        "http://127.0.0.1:8000/api/priority/" label="Приоритет" onChange={handlePriorityChange} />
+                    <MultipleSelect apiEndpoint=
+                                        "http://127.0.0.1:8000/api/week_days/"
+                                    label="Напоминание" onChange={handleReminderChange} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose} className="Button-secondary">
+                        Закрыть
+                    </Button>
+                    <Button onClick={sendDataToApi} className="Button-primary">
+                        Создать
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+             {selectedGoal && (
+                <EditGoalModal
+                    show={editModalShow}
+                    handleClose={() => {
+                        setEditModalShow(false);
+                        setSelectedGoal(null); // Clear the selected goal when closing the modal
+                    }}
+                    goal={selectedGoal}
+                    onSave={handleSaveEditedGoal}
+                />
+            )}
+            <DeleteConfirmationModal
+                show={showDeleteConfirmation}
+                onClose={closeDeleteConfirmation}
+                onConfirm={deleteGoal}
+                goalTitle={goalToDelete ? goalToDelete.title : ''}
+            />
         </>
     );
 }
