@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 
 // Import the necessary locale data
 import 'dayjs/locale/ru';
+import FormControl from "@mui/material/FormControl";
 
 // Set the locale for dayjs to Russian
 dayjs.locale('ru');
@@ -30,17 +31,20 @@ export default function CalendarDatePicker({ value, onChange }) {
             }}
             locale={ruRU}
         >
-            <DemoContainer components={['DatePicker']}>
+            <DemoContainer components={['DatePicker']} sx={{width:'100%', padding: 0}}>
+
                 <DatePicker
-                    label="Срок выполнения цели"
+                    label="Срок выполнения"
                     onAccept={handleDateChange}
                     format="YYYY-MM-DD"
                     value={value ? dayjs(value) : null} // Convert value to Dayjs object
                     startDay="1"
                     sx={{
                         width: '100%',
+                        minWidth: 0
                     }}
                 />
+
             </DemoContainer>
         </LocalizationProvider>
     );

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 
     'rest_framework.authtoken',
     'corsheaders',
+    'django_filters',
 
     'apps.goalGetter',
     'apps.users',

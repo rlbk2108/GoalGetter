@@ -53,7 +53,6 @@ export default function MultipleSelectCheckmarks({ apiEndpoint, label, value, on
     };
 
     return (
-        <div>
             <FormControl sx={{ width: '100%' }}>
                 <InputLabel id={`demo-multiple-checkbox-label-${label}`}>{label}</InputLabel>
                 <Select
@@ -62,6 +61,9 @@ export default function MultipleSelectCheckmarks({ apiEndpoint, label, value, on
                     multiple
                     value={selectedValues}
                     onChange={handleChange}
+                    sx={{
+                        width: '100%'
+                    }}
                     input={<OutlinedInput label={label} />}
                     renderValue={(selected) => {
                         const selectedNames = selected.map(id => {
@@ -80,6 +82,5 @@ export default function MultipleSelectCheckmarks({ apiEndpoint, label, value, on
                     ))}
                 </Select>
             </FormControl>
-        </div>
     );
 }

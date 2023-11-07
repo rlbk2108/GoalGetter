@@ -31,10 +31,10 @@
   position: relative;
   align-self: flex-start;
   align-items: flex-start;
-  border-radius: 8px;
+  border-radius: 18px;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #D9D9D9;
+  background-color: #eaeaea;
 }
 .home-container01 {
   flex: 0;
@@ -87,6 +87,7 @@
   justify-content: flex-start;
 }
 .home-textinput {
+  cursor: pointer;
   top: 8px;
   left: 0;
   right: 0;
@@ -98,6 +99,13 @@
   border-radius: 6px;
   padding: 4px 18px;
 }
+
+.search-modal-wrapper {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 16px;
+}
+
 .home-container04 {
   flex: 0 0 auto;
   display: flex;
@@ -215,7 +223,7 @@
 }
 .home-separator {
   width: 100%;
-  height: 2px;
+  height: 1.25px;
   margin-top: 24px;
   margin-bottom: 24px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -371,6 +379,7 @@
   align-self: stretch;
   align-items: flex-start;
   flex-direction: column;
+  gap: 0;
 }
 .home-text10 {
   color: rgba(0, 0, 0, 0.85);
@@ -378,7 +387,6 @@
   font-weight: 600;
 }
 .home-container13 {
-  gap: 8px;
   flex: 0 0 auto;
   height: auto;
   display: flex;
@@ -391,13 +399,21 @@
   width: 72px;
   height: 24px;
   align-self: flex-end;
+  color: #151515;
+  border-width: 0;
   border-radius: 6px;
+  padding: 0;
   background-color: rgba(249, 81, 81, 0.48);
 }
 .home-button08 {
   width: 72px;
   height: 24px;
   align-self: flex-end;
+  color: #151515;
+  --bs-btn-hover-bg: rgba(173, 81, 249, 0.48);;
+  --bs-btn-active-bg: rgba(173, 81, 249, 0.28);
+  border-width: 0;
+  padding: 0;
   border-radius: 6px;
   background-color: rgba(173, 81, 249, 0.48);
 }
@@ -500,11 +516,12 @@
   margin-bottom: 32px;
 }
 .home-button10 {
-  background-color: #b0b0b0;
-  height: 100%;
+  background-color: transparent;
+  height: 50px;
   display: flex;
   align-self: stretch;
-  border-color: transparent;
+  border-color: #909090;
+  border-width: 1.5px;
   text-align: left;
   margin-right: 0;
   border-radius: 6px;
@@ -525,6 +542,7 @@
   fill: rgba(0, 0, 0, 0.65);
   width: 24px;
   height: 24px;
+  align-self: center;
 }
 .home-text15 {
   color: rgba(0, 0, 0, 0.65);
@@ -664,31 +682,38 @@
 }
 .home-separator3 {
   width: 100%;
-  height: 2px;
+  height: 1.25px;
   margin-top: 16px;
   margin-bottom: 16px;
   background-color: rgba(0, 0, 0, 0.3);
 }
 .home-goal-ops {
   flex: 0 0 auto;
-  width: auto;
+  width: 450px;
   height: 100%;
   display: flex;
   padding: 32px;
   align-self: flex-start;
   align-items: center;
-  border-radius: 8px;
+  overflow: hidden;
+  border-radius: 18px;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #D9D9D9;
+  background-color: #eaeaea;
   transition: 0.5s;
 }
+
+.css-0 {
+  align-self: stretch;
+}
+
 .home-container21 {
   flex: 0 0 auto;
-  width: 342px;
+  width: 100%;
   height: 100%;
   display: inline-flex;
   align-items: flex-start;
+  overflow: hidden;
   flex-direction: column;
   transition: 0.3s;
 }
@@ -707,7 +732,6 @@
   align-self: center;
 }
 .home-button13 {
-  top: 0;
   right: 0;
   display: flex;
   padding: 6px;
@@ -716,10 +740,12 @@
   transition: 0.3s;
   border-width: 0;
   flex-direction: row;
+  border-radius: 8px;
   background-color: transparent;
 }
 .home-button13:hover {
   background-color: #a0a0a0;
+  border-radius: 8px;
 }
 .home-icon26 {
   fill: rgba(0, 0, 0, 0.65);
@@ -727,7 +753,7 @@
   height: 24px;
 }
 .home-form {
-  gap: 8px;
+  gap: 12px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -740,7 +766,6 @@
   align-self: stretch;
   margin-top: 32px;
   border-color: rgba(0, 0, 0, 0.35);
-
   border-width: 1px;
   border-radius: 6px;
   padding: 4px 18px;
@@ -752,23 +777,71 @@
   border-width: 1px;
   border-radius: 6px;
 }
+
+.goal-edit-column {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: margin-right .5s;
+}
+
+.goal-create-column {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: margin-left .5s;
+}
+
 .home-container23 {
   gap: 0;
   flex: 0 0 auto;
-  width: 220px;
-  height: 40px;
+  width: 90%;
+  height: auto;
   display: flex;
   position: relative;
   align-self: flex-start;
   margin-top: 24px;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
+
 .home-text18 {
   color: rgba(0, 0, 0, 0.75);
   font-style: normal;
   font-weight: 600;
 }
+
+.select-wrapper {
+  width: 60%;
+}
+
+.search-modal-item {
+  width: 90%;
+  height: auto;
+}
+
+.box1 {
+  display: inline-grid;
+  width: 95%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+.box2{
+  font-weight: 400;
+  font-size: 20px;
+  display: inline-grid;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.search-modal-search {
+  padding: 12px;
+  margin-bottom: 32px;
+}
+
 .home-select {
   top: 0;
   right: 0;
@@ -780,14 +853,13 @@
 .home-container24 {
   gap: 0;
   flex: 0 0 auto;
-  width: 220px;
-  height: 40px;
+  width: 90%;
+  height: auto;
   display: flex;
   position: relative;
   align-self: flex-start;
-  margin-top: 12px;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 .home-text19 {
   color: rgba(0, 0, 0, 0.75);
@@ -910,20 +982,41 @@
   align-self: flex-start;
   align-items: flex-end;
   justify-content: space-between;
+  transition: 0.5s;
 }
-.home-button14 {
+.delete-button {
   color: rgba(0, 0, 0, 0.85);
   width: 144px;
   border-color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+  background-color: transparent;
   border-width: 1px;
+  --bs-btn-active-bg: rgba(0, 0, 0, 0.60);
+  --bs-btn-active-border-color: transparent;
 }
-.home-button15 {
+
+.delete-button:hover {
+  background-color: rgba(0, 0, 0, 0.45);
+  border-color: transparent;
+}
+
+.save-button {
   color: rgba(0, 0, 0, 0.85);
   width: 166px;
   align-self: flex-end;
   border-width: 0;
-  background-color: #ffe644;
+  margin: 0;
+  background-color: rgba(255, 230, 68, 100%);
+  --bs-btn-active-bg: rgba(255, 230, 68, 50%);
+  --bs-btn-active-color: #151515;
 }
+
+.save-button:hover {
+  background-color: rgb(250, 225, 91);
+  color: #151515;
+}
+
+
 @media(max-width: 991px) {
   .home-profile {
     padding-left: 8px;

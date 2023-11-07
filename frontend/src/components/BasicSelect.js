@@ -51,13 +51,14 @@ export default function BasicSelect({ label, apiEndpoint, value, onChange }) {
     };
 
     return (
-        <div>
-            <FormControl sx={{ width: '100%' }}>
+            <FormControl sx={{ width: '100%', alignSelf: 'end'}}>
                 <InputLabel id={`demo-${label}-select-label`}>{label}</InputLabel>
                 <Select
                     labelId={`demo-${label}-select-label`}
                     id={`demo-${label}-select`}
                     open={open}
+                    sx={{width: '100%',
+                         }}
                     onClose={handleClose}
                     onOpen={handleOpen}
                     value={selectedValue} // Use selectedValue as the value
@@ -74,6 +75,5 @@ export default function BasicSelect({ label, apiEndpoint, value, onChange }) {
                     ))}
                 </Select>
             </FormControl>
-        </div>
     );
 }

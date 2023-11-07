@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import EditGoalModal from "./EditGoalForm";
 
 const DeleteConfirmationModal = ({ show, onClose, onConfirm, goalTitle }) => {
     return (

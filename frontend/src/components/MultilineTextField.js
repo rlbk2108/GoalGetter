@@ -10,19 +10,19 @@ export default function MultilineTextField({ value, onChange }) {
     return (
         <Box
             component="form"
-            sx={{
-                '& .MuiTextField-root': {width: '100%' },
-            }}
             noValidate
             autoComplete="off"
         >
             <div>
                 <TextField
-                    id="outlined-multiline-flexible"
+                    id="outlined-multiline-static"
                     label="Описание"
+                    sx={{
+                        width: '100%',
+                    }}
                     value={value}
                     multiline
-                    maxRows={4}
+                    rows={4}
                     onChange={handleDescriptionChange}
                 />
             </div>

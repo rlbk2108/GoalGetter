@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from core.permissions import IsOwner
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 from .serializers import (GoalCreateSerializers, TagSerializers, CategorySerializers, PrioritySerializers,
                           StatusSerializers, WeekDaysSerializers, HistorySerializers)
@@ -14,6 +15,9 @@ from .models import Goal, Tag, Category, Priority, Status, WeekDays, History
 
 class GoalCreatAPIView(ListCreateAPIView):
     serializer_class = GoalCreateSerializers
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['category', 'deadline', 'tag', 'priority', 'status', 'reminder']
+    search_fields = ['^title', '^description']
 
     def get_queryset(self):
         # Возвращаем только записи, принадлежащие текущему пользователю
@@ -74,4 +78,3 @@ class StatusAPIView(ListAPIView):
 class WeekdaysAPIView(ListAPIView):
     queryset = WeekDays.objects.all()
     serializer_class = WeekDaysSerializers
-
