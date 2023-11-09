@@ -426,9 +426,8 @@ const Goals = () => {
                               </div>
                             </>
                         )}
-                      <svg viewBox="0 0 1024 1024" className="home-icon24">
-                        <path d="M250 176l92-90 426 426-426 426-92-90 338-336z"></path>
-                      </svg>
+
+                          <svg className="home-icon24" viewBox="-3.03 -3.03 81.86 81.86" xmlns="http://www.w3.org/2000/svg" fill="#808080" stroke="#808080" stroke-width="3.335376"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.909648"></g><g id="SVGRepo_iconCarrier"> <g id="Group_65" data-name="Group 65" transform="translate(-831.568 -384.448)"> <path id="Path_57" data-name="Path 57" d="M833.068,460.252a1.5,1.5,0,0,1-1.061-2.561l33.557-33.56a2.53,2.53,0,0,0,0-3.564l-33.557-33.558a1.5,1.5,0,0,1,2.122-2.121l33.556,33.558a5.53,5.53,0,0,1,0,7.807l-33.557,33.56A1.5,1.5,0,0,1,833.068,460.252Z" fill="#808080"></path> </g> </g></svg>
                     </div>
                     <div className="home-separator3"></div>
                   </div>
