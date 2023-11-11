@@ -527,16 +527,15 @@
   border-radius: 6px;
   flex-direction: row;
   margin-bottom: 32px;
+  --bs-btn-active-bg: #a0a0a0;
+  --bs-btn-active-border-color: transparent;
 }
 
 .home-button10:hover {
-  background-color: #a0a0a0;
+  background-color: rgba(160, 160, 160, 0.51);
   border-color: transparent;
 }
 
-.home-button10:active {
-  background-color: rgba(160, 160, 160, 0.51);
-}
 
 .home-icon18 {
   fill: rgba(0, 0, 0, 0.65);
@@ -620,7 +619,7 @@
 }
 
 .home-container18:hover {
-  background-color: #dedede;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
 }
 
 .home-container18:active {
@@ -631,6 +630,7 @@
   gap: 16px;
   flex: 0 0 auto;
   width: 100%;
+  padding-left: 12px;
   height: auto;
   display: flex;
   position: relative;
@@ -669,7 +669,7 @@
   align-self: flex-end;
   align-items: center;
   padding-top: 8px;
-  padding-left: 39px;
+  padding-left: 47px;
   justify-content: flex-start;
 }
 .home-icon22 {

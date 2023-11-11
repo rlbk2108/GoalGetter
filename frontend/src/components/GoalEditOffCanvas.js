@@ -93,15 +93,15 @@ const GoalEditOffCanvas = ({ handleClose, goal = {}, onSave }) => {
     };
 
     const handleSave = () => {
-    if (!editedTitle.trim()) {
-        // Set the title error state
-        setTitleError(true);
-        return;
-    }
-    if (dayjs(editedDeadline).isBefore(dayjs().startOf('day'))) {
-        setDeadlineError(true);
-        return;
-    }
+        if (!editedTitle.trim()) {
+            // Set the title error state
+            setTitleError(true);
+            return;
+        }
+        if (dayjs(editedDeadline).isBefore(dayjs().startOf('day'))) {
+            setDeadlineError(true);
+            return;
+        }
 
         onSave({
             id: goal.id,
